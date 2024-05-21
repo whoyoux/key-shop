@@ -88,7 +88,7 @@ const OfferCard = ({ offer }: { offer: Offer }) => {
 			/>
 			<div className="w-full flex justify-between items-center">
 				<div>
-					<Link href={`/dashboard/offer/${offer.id}`}>
+					<Link href={`/offer/${offer.id}`}>
 						<h3 className="font-semibold text-lg line-clamp-1 max-w-[500px]">
 							{offer.title}
 						</h3>
