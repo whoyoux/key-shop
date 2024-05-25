@@ -1,7 +1,7 @@
 import { buy } from "@/actions/offer";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { AppWindow, Apple, ChevronLeft, Terminal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +33,8 @@ const OfferPage = async ({ params }: Props) => {
 		},
 	});
 
+	console.log(offer);
+
 	return (
 		<div className="max-w-screen-lg mx-auto">
 			<div className="mb-6">
@@ -50,36 +52,11 @@ const OfferPage = async ({ params }: Props) => {
 					await buy({ itemId: offer.id });
 				}}
 			>
-				{/* <div className="aspect-[2/1] w-full max-w-full relative">
-					<Image
-						src={offer.imageUrl}
-						alt="Offer image"
-						quality={100}
-						fill
-						className="rounded-md h-auto"
-					/>
-				</div>
-				<div className="w-full flex gap-4">
-					{offer.screenshots.map((screenshot) => (
-						<div
-							key={screenshot.id}
-							className="relative min-w-[100px] aspect-[2/1]"
-						>
-							<Image
-								src={screenshot.pathFull}
-								alt="Screenshot"
-								quality={60}
-								fill
-								className="rounded-md h-auto"
-							/>
-						</div>
-					))}
-				</div> */}
+				<h1 className="text-xl md:text-2xl font-semibold">{offer.title}</h1>
 				<ImageHero imageUrl={offer.imageUrl} screenshots={offer.screenshots} />
-				<h1 className="text-xl font-semibold">{offer.title}</h1>
-				{/* <p className="text-sm text-muted-foreground">{offer.description}</p> */}
+
 				<div
-					className="prose-invert text-muted-foreground [&>img]:rounded-lg "
+					className="prose prose-invert [&>img]:rounded-lg max-w-full"
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{ __html: offer.description }}
 				/>
@@ -96,7 +73,26 @@ const OfferPage = async ({ params }: Props) => {
 				</div>
 				<div className="flex items-center justify-between">
 					<h2 className="font-semibold">Price</h2>
-					<span className="font-semibold">{formatPrice(offer.price)}</span>
+					<div className="flex items-center gap-2">
+						<span
+							className={cn(
+								"font-semibold",
+								offer.isDiscount && "text-red-500 line-through",
+							)}
+						>
+							{formatPrice(offer.price)}
+						</span>
+						<span className="font-semibold text-primary">
+							{offer.isDiscount &&
+								offer.discontPrice &&
+								formatPrice(offer.discontPrice)}
+						</span>
+						{offer.isDiscount && (
+							<span className="font-semibold text-primary">
+								-{offer.discountPercent && offer.discountPercent}%
+							</span>
+						)}
+					</div>
 				</div>
 				<Button className="font-semibold" type="submit">
 					Buy now

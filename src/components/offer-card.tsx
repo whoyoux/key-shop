@@ -1,6 +1,6 @@
 "use client";
 import { buy } from "@/actions/offer";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import type { Prisma } from "@prisma/client";
 import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
@@ -41,7 +41,18 @@ const OfferCard = ({ offer }: { offer: OfferWithScreenshots }) => {
 							{offer.title}
 						</h3>
 					</Link>
-					<p>{formatPrice(offer.price)}</p>
+					<p className="flex gap-2 items-center">
+						<span
+							className={cn(offer.isDiscount && "line-through text-red-500")}
+						>
+							{formatPrice(offer.price)}
+						</span>
+						{offer.isDiscount && offer.discontPrice && (
+							<span className="text-primary">
+								{formatPrice(offer.discontPrice)}
+							</span>
+						)}
+					</p>
 				</div>
 				<Button
 					className="font-semibold flex items-center gap-2"

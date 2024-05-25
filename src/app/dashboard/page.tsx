@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
-import type { Order, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import type { User } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const DashboardPage = async () => {
 
 	return (
 		<div className="flex flex-col">
-			<Tabs defaultValue="orders" className="w-full">
+			<Tabs defaultValue="account" className="w-full">
 				<TabsList className="w-full justify-start">
 					<TabsTrigger value="account">Account</TabsTrigger>
 					<TabsTrigger value="orders">My orders</TabsTrigger>
@@ -102,7 +102,7 @@ const AccountTab = ({ user }: { user: User }) => {
 							alt="avatar"
 							width={82}
 							height={82}
-							className="rounded-lg"
+							className="rounded-lg bg-card"
 						/>
 					</div>
 					<div>

@@ -91,6 +91,10 @@ model Offer {
   macSupport     Boolean
   linuxSupport   Boolean
 
+  isDiscount      Boolean @default(false) @map("is_discount")
+  discontPrice    Float?  @map("discount_amount")
+  discountPercent Float?  @map("discount_percent")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -52,7 +52,10 @@ export const buy = authAction(schema, async ({ itemId }, { session }) => {
 			{
 				price_data: {
 					currency: "usd",
-					unit_amount: offerFound.price,
+					unit_amount:
+						offerFound.isDiscount && offerFound.discontPrice
+							? offerFound.discontPrice
+							: offerFound.price,
 					product_data: {
 						name: `${offerFound.title} - Game Key`,
 						images: [offerFound.imageUrl],

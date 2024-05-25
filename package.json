@@ -11,6 +11,7 @@
         "db:seed": "pnpm dlx tsx prisma/seed.ts",
         "db:push": "prisma db push",
         "db:studio": "prisma studio",
+        "db:reset": "prisma db push --force-reset && prisma db push && pnpm db:seed",
         "db:generate": "prisma generate",
         "stripe:listen": "stripe listen --forward-to localhost:3000/api/payments/webhook",
         "stripe:trigger": "stripe trigger payment_intent.succeeded"

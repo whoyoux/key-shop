@@ -36,9 +36,9 @@ async function main() {
 
 	const appsToAdd = [];
 
-	shuffle(apps);
+	// shuffle(apps);
 
-	for (const app of apps.slice(0, 100)) {
+	for (const app of apps.slice(0, 200)) {
 		const { appid, name } = app;
 
 		const details = await fetch(
@@ -85,32 +85,38 @@ async function main() {
 
 		// await sleep(5000);
 
-		appsToAdd.push({
-			title: data.name,
-			description: data.detailed_description,
-			shortDescription: data.short_description,
-			price: data.price_overview.final ?? Number(Math.random() * 100 + 10),
-			imageUrl: data.header_image,
-			windowsSupport: data.platforms.windows,
-			macSupport: data.platforms.mac,
-			linuxSupport: data.platforms.linux,
-			screenshots: {
-				createMany: {
-					data:
-						data.screenshots.map((screenshot) => ({
-							pathFull: screenshot.path_full,
-							pathThumbnail: screenshot.path_thumbnail,
-						})) ?? [],
-				},
-			},
-			developers: data.developers[0],
-			publishers: data.publishers[0],
-			type: data.type,
-		});
+		// appsToAdd.push({
+		// 	title: data.name,
+		// 	description: data.detailed_description,
+		// 	shortDescription: data.short_description,
+		// 	price: data.price_overview.final ?? Number(Math.random() * 100 + 10),
+		// 	imageUrl: data.header_image,
+		// 	windowsSupport: data.platforms.windows,
+		// 	macSupport: data.platforms.mac,
+		// 	linuxSupport: data.platforms.linux,
+		// 	screenshots: {
+		// 		createMany: {
+		// 			data:
+		// 				data.screenshots.map((screenshot) => ({
+		// 					pathFull: screenshot.path_full,
+		// 					pathThumbnail: screenshot.path_thumbnail,
+		// 				})) ?? [],
+		// 		},
+		// 	},
+		// 	developers: data.developers[0],
+		// 	publishers: data.publishers[0],
+		// 	type: data.type,
+		// });
+
+		const isDiscount = Math.random() > 0.8;
+		const discountPercent = Math.floor(Math.random() * 50 + 10);
+		const discountPrice = Math.floor(
+			data.price_overview.final -
+				data.price_overview.final * (discountPercent / 100),
+		);
 
 		await prisma.offer.create({
 			data: {
-				id: crypto.randomUUID(),
 				title: data.name,
 				description: data.detailed_description,
 				shortDescription: data.short_description,
@@ -135,16 +141,15 @@ async function main() {
 						})),
 					},
 				},
+				isDiscount,
+				discontPrice: isDiscount ? discountPrice : null,
+				discountPercent: isDiscount ? discountPercent : null,
 				developers: data.developers[0],
 				publishers: data.publishers[0],
 				type: data.type,
 			},
 		});
 	}
-
-	// await prisma.offer.createMany({
-	// 	data: appsToAdd,
-	// });
 
 	console.log("Done.");
 }
