@@ -6,6 +6,10 @@ const nextConfig = {
 				hostname: "cdn.akamai.steamstatic.com",
 				protocol: "https",
 			},
+			{
+				hostname: "cdn.discordapp.com",
+				protocol: "https",
+			},
 		],
 	},
 	experimental: {

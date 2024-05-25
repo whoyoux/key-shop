@@ -1,17 +1,16 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { MyError, authAction } from "@/lib/safe-action";
 import { stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export async function buy(itemId: string) {
-	const session = await auth();
+const schema = z.object({
+	itemId: z.string(),
+});
 
-	if (!session?.user) {
-		throw new Error("You must be logged in to buy an item");
-	}
-
+export const buy = authAction(schema, async ({ itemId }, { session }) => {
 	const offerFound = await prisma.offer.findUnique({
 		where: {
 			id: itemId,
@@ -22,11 +21,11 @@ export async function buy(itemId: string) {
 	});
 
 	if (!offerFound) {
-		throw new Error("Offer not found");
+		throw new MyError("Offer not found");
 	}
 
 	if (offerFound.keys.length === 0) {
-		throw new Error("No keys available");
+		throw new MyError("No keys available");
 	}
 
 	const order = await prisma.order.create({
@@ -73,8 +72,8 @@ export async function buy(itemId: string) {
 	});
 
 	if (!stripeSession?.url) {
-		throw new Error("Failed to create stripe session");
+		throw new MyError("Failed to create stripe session");
 	}
 
 	redirect(stripeSession.url);
-}
+});

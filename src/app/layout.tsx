@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { SessionProvider } from "next-auth/react";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const fontSans = FontSans({
 	subsets: ["latin"],
 	variable: "--font-sans",
@@ -72,6 +74,7 @@ export default function RootLayout({
 			>
 				<Header />
 				<main className="px-4 md:px-8 xl:px-12 pb-20">{children}</main>
+				<Toaster richColors />
 			</body>
 		</html>
 	);

@@ -54,6 +54,12 @@ const OrderPage = async ({ params }: Props) => {
 					<h2 className="text-lg font-medium">
 						Your key: <span className="text-primary">{order.key?.key}</span>
 					</h2>
+					<h2 className="text font-medium">
+						Paid at:{" "}
+						<span className="text-muted-foreground">
+							{new Date(order.paidAt ?? new Date()).toLocaleDateString()}
+						</span>
+					</h2>
 				</div>
 			</div>
 		</div>
