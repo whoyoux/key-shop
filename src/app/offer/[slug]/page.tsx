@@ -47,7 +47,7 @@ const OfferPage = async ({ params }: Props) => {
 				className="flex flex-col gap-4"
 				action={async () => {
 					"use server";
-					await buy(offer.id);
+					await buy({ itemId: offer.id });
 				}}
 			>
 				{/* <div className="aspect-[2/1] w-full max-w-full relative">
