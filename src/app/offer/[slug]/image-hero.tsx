@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import type { Screenshot } from "@prisma/client";
-import Image from "next/image";
-import { useState } from "react";
+import NextImage from "next/image";
+import { useEffect, useState } from "react";
 
 type Props = {
 	imageUrl: string;
@@ -12,10 +12,19 @@ type Props = {
 
 const ImageHero = ({ imageUrl, screenshots }: Props) => {
 	const [mainImage, setMainImage] = useState(imageUrl);
+
+	// useEffect(() => {
+	// 	screenshots.map((screenshot) => {
+	// 		const img = new Image();
+	// 		img.src = screenshot.pathThumbnail;
+	// 		console.log(img);
+	// 	});
+	// }, [screenshots]);
+
 	return (
 		<>
 			<div className="aspect-[2/1] w-full max-w-full relative bg-card">
-				<Image
+				<NextImage
 					src={mainImage}
 					alt="Offer image"
 					quality={100}
@@ -32,7 +41,7 @@ const ImageHero = ({ imageUrl, screenshots }: Props) => {
 					)}
 					onMouseDown={() => setMainImage(imageUrl)}
 				>
-					<Image
+					<NextImage
 						src={imageUrl}
 						alt="Screenshot"
 						quality={60}
@@ -45,11 +54,12 @@ const ImageHero = ({ imageUrl, screenshots }: Props) => {
 						key={screenshot.id}
 						className={cn(
 							"relative min-w-[100px] aspect-[2/1] hover:cursor-pointer rounded-md bg-card",
-							screenshot.pathFull === mainImage && "border-2 border-primary",
+							screenshot.pathThumbnail === mainImage &&
+								"border-2 border-primary",
 						)}
-						onMouseDown={() => setMainImage(screenshot.pathFull)}
+						onMouseDown={() => setMainImage(screenshot.pathThumbnail)}
 					>
-						<Image
+						<NextImage
 							src={screenshot.pathFull}
 							alt="Screenshot"
 							quality={60}
